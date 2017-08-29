@@ -3,6 +3,7 @@ var keys = require('./keys.js');
 var request = require('request');
 var input = process.argv[2];
 var input2 = process.argv.slice(3);
+var input3 = process.argv[3];
 
 var Twitter = require('twitter');
 
@@ -35,50 +36,92 @@ var spotify = new Spotify({
     secret: keys.spotKeys.client_secret
 });
 if (input === 'spotify-this-song') {
-    spotify.search({
-        type: 'track',
-        query: input2,
-    }, function(err, data) {
-        if (err) {
-            return console.log('Error occurred: ' + err);
-        }
-        var info = data.tracks.items[0];
-        console.log(`Album: ${info.album.name}`);
-        console.log(`Artist: ${info.artists[0].name}`);
-        console.log(`Track: ${info.name}`);
-        console.log(`Song Preview: ${info.preview_url}`);
-    });
+    if (input3 === undefined) {
+        spotify.search({
+            type: 'track',
+            query: 'Ace Of Base The Sign',
+        }, function(err, data) {
+            if (err) {
+                return console.log('Error occurred: ' + err);
+            }
+            var info = data.tracks.items[0];
+            console.log(`Album: ${info.album.name}`);
+            console.log(`Artist: ${info.artists[0].name}`);
+            console.log(`Track: ${info.name}`);
+            console.log(`Song Preview: ${info.preview_url}`);
+
+        });
+    } else {
+        spotify.search({
+            type: 'track',
+            query: input2,
+        }, function(err, data) {
+            if (err) {
+                return console.log('Error occurred: ' + err);
+            }
+            var info = data.tracks.items[0];
+            console.log(`Album: ${info.album.name}`);
+            console.log(`Artist: ${info.artists[0].name}`);
+            console.log(`Track: ${info.name}`);
+            console.log(`Song Preview: ${info.preview_url}`);
+
+        });
+    }
+
 }
 
 var request = require("request");
 
 if (input === 'movie-this') {
+    if (input3 === undefined) {
+        var queryUrl = "http://www.omdbapi.com/?t=" + 'Mr Nobody' + "&y=&plot=short&apikey=40e9cece";
 
 
-    var movieName = input2;
+        request(queryUrl, function(error, response, body) {
 
-    var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece";
-
-
-    request(queryUrl, function(error, response, body) {
-
-        if (!error && response.statusCode === 200) {
-            var myObject = JSON.parse(body);
-            // console.log(JSON.parse(body));
-            console.log("Title: " + myObject.Title);
-            console.log("Year: " + myObject.Year);
-            console.log("IMDB Rating: " + myObject.imdbRating);
-            console.log("Rotten Tomatoes:" + myObject.Ratings[1].Value);
-            console.log("Country: " + myObject.Country);
-            console.log("Language: " + myObject.Language);
-            console.log("Actors: " + myObject.Actors);
-            console.log("Plot: " + myObject.Plot);
+            if (!error && response.statusCode === 200) {
+                var myObject = JSON.parse(body);
+                // console.log(JSON.parse(body));
+                console.log("Title: " + myObject.Title);
+                console.log("Year: " + myObject.Year);
+                console.log("IMDB Rating: " + myObject.imdbRating);
+                console.log("Rotten Tomatoes:" + myObject.Ratings[1].Value);
+                console.log("Country: " + myObject.Country);
+                console.log("Language: " + myObject.Language);
+                console.log("Actors: " + myObject.Actors);
+                console.log("Plot: " + myObject.Plot);
 
 
-        }
+            }
 
-    });
+        });
+    } else {
 
+
+        var movieName = input2;
+
+        var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece";
+
+
+        request(queryUrl, function(error, response, body) {
+
+            if (!error && response.statusCode === 200) {
+                var myObject = JSON.parse(body);
+                // console.log(JSON.parse(body));
+                console.log("Title: " + myObject.Title);
+                console.log("Year: " + myObject.Year);
+                console.log("IMDB Rating: " + myObject.imdbRating);
+                console.log("Rotten Tomatoes:" + myObject.Ratings[1].Value);
+                console.log("Country: " + myObject.Country);
+                console.log("Language: " + myObject.Language);
+                console.log("Actors: " + myObject.Actors);
+                console.log("Plot: " + myObject.Plot);
+
+
+            }
+
+        });
+    }
 }
 if ("do-what-it-says" === input) {
 
@@ -90,18 +133,18 @@ if ("do-what-it-says" === input) {
         }
         console.log(data.split(',')[1]);
         spotify.search({
-        type: 'track',
-        query: data.split(',')[1],
-    }, function(err, data) {
-        if (err) {
-            return console.log('Error occurred: ' + err);
-        }
-        var info = data.tracks.items[0];
-        console.log(`Album: ${info.album.name}`);
-        console.log(`Artist: ${info.artists[0].name}`);
-        console.log(`Track: ${info.name}`);
-        console.log(`Song Preview: ${info.preview_url}`);
-    });
+            type: 'track',
+            query: data.split(',')[1],
+        }, function(err, data) {
+            if (err) {
+                return console.log('Error occurred: ' + err);
+            }
+            var info = data.tracks.items[0];
+            console.log(`Album: ${info.album.name}`);
+            console.log(`Artist: ${info.artists[0].name}`);
+            console.log(`Track: ${info.name}`);
+            console.log(`Song Preview: ${info.preview_url}`);
+        });
     });
 
 }
